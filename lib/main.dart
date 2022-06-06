@@ -37,22 +37,47 @@ class Homepage extends StatelessWidget {
               builder: (context,snapshot){
                 switch (snapshot.connectionState) {
                   case ConnectionState.done:
-                  //   final user = FirebaseAuth.instance.currentUser;
-                  //   print(user);
-                  //   if (user?.emailVerified ?? false){
-                  //   }else{
-                  //     return const VerifiedEmailView();
-                  // }  
-                   // print(FirebaseAuth.instance.currentUser);
-                
-                    return const Loginview();
+                    final user = FirebaseAuth.instance.currentUser;
+                    if (user != null){
+                      if(user.emailVerified){
+                        print('Email is verified');
+                      }
+                      else{
+                        return const VerifiedEmailView();
+                      }
+                    }
+                    else{
+                      return const Loginview();
+                    }
+                  return const NotesView();
+                    
                   default: 
-                    return const Text('Waiting...');
+                    return const CircularProgressIndicator();
                 }
               
          },
       
       );
+  }
+}
+
+
+class NotesView extends StatefulWidget {
+  const NotesView({Key? key}) : super(key: key);
+
+  @override
+  State<NotesView> createState() => _NotesViewState();
+}
+
+class _NotesViewState extends State<NotesView> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('MAIN UI'),
+      ),
+      body: const Text('Hello World'),
+    );
   }
 }
 
