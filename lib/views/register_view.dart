@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
-import 'package:mynotes/firebase_options.dart';
+
 
 class Registerview extends StatefulWidget {
   const Registerview({Key? key}) : super(key: key);
@@ -31,64 +31,60 @@ class _RegisterviewState extends State<Registerview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(
-        title: const Text("Register"),
-        ),
-        body: FutureBuilder(future:  Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform),
-              builder: (context,snapshot){
-                switch (snapshot.connectionState) {
-                  case ConnectionState.done:
-                   return Column(
-                   children: [
-                  TextField(
-              controller: _email,
-              decoration: const InputDecoration(
-              hintText: 'Enter your email',
+    return Scaffold(appBar:AppBar(
+      title: const Text('Register'),
+      ),
+      body: Column(
+                     children: [
+                    TextField(
+                controller: _email,
+                decoration: const InputDecoration(
+                hintText: 'Enter your email',
+                ),
+                autocorrect: false,
               ),
-              autocorrect: false,
-            ),
-            TextField(
-               controller: _password,
-               obscureText: true,
-              decoration: const InputDecoration(
-              hintText: 'Enter your password',
-              
+              TextField(
+                 controller: _password,
+                 obscureText: true,
+                decoration: const InputDecoration(
+                hintText: 'Enter your password',
                 
+                  
+              ),
             ),
-          ),
-
-            TextButton(onPressed: () async {
-          
-              final email = _email.text;
-              final password = _password.text;
-              try {final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: email, password: password);
-
-                print(userCredential);
-              }
-              on FirebaseAuthException catch (e){
-                if (e.code == 'weak-password'){
-                 print('Weak Password');
-               }
-               else if (e.code == 'invalid-email')
-                print('Invalid Email');
-              else if (e.code == 'email-already-in-use')
-                print('Email already in use');
-              }
-            },
-            child: const Text('register'),
-            ),
-          ],
-          );
-                default:
-                  return const Text('Loading');
+    
+              TextButton(onPressed: () async {
+            
+                final email = _email.text;
+                final password = _password.text;
+                try {final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  email: email, password: password);
+    
+                  print(userCredential);
                 }
-                
+                on FirebaseAuthException catch (e){
+                  if (e.code == 'weak-password'){
+                   print('Weak Password');
+                 }
+                 else if (e.code == 'invalid-email'){
+                  print('Invalid Email');}
+                else if (e.code == 'email-already-in-use')
+                  print('Email already in use');
+                else{
+                Navigator.of(context).pushNamedAndRemoveUntil(
+              '/verifiedemail/',
+              (route) => false);}
+                }
               },
-
+              child: const Text('register'),
+              ),
+            TextButton(onPressed: () {Navigator.of(context).pushNamedAndRemoveUntil(
+              '/login/',
+              (route) => false);},
+            child: const Text('Already Have an account? Login'),
+            )
+          ],
         ),
-      
-         );
-  }
+    );
+  } 
 }
