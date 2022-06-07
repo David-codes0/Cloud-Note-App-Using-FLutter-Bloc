@@ -49,7 +49,7 @@ class Homepage extends StatelessWidget {
                       }
                     }
                     else{
-                      return const Loginview();
+                      return const NotesView();
                     }
                   default: 
                     return const CircularProgressIndicator();
