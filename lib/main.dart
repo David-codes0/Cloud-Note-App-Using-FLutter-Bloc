@@ -1,5 +1,3 @@
-import 'dart:developer' as devtools show log;
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +22,7 @@ void main() {
         '/login/':(context) => const Loginview(),
         '/register/': (context) => const  Registerview(),
         '/verifiedemail/' : (context) => const VerifiedEmailView(),
+        '/notes/' : (context) => const NotesView(),
       },
     ));
 }
