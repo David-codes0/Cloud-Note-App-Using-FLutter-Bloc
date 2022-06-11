@@ -19,7 +19,7 @@ void main() {
     });
 
   test('Should be able to initialized', () async{
-      await provider.initializeApp();
+      await provider.initialize();
       expect(provider.isInitialized, true);
     });
 
@@ -28,7 +28,7 @@ void main() {
   });
 
     test('Should be able to initialize in less than 2 seconds', () async{
-      await provider.initializeApp();
+      await provider.initialize();
       expect(provider.isInitialized, true);
     },
     timeout: const Timeout(Duration(seconds: 2)),
@@ -102,7 +102,7 @@ class MockAuthProvider implements AuthProvider{
   AuthUser? get currentUser => _user;
 
   @override
-  Future<void> initializeApp()async {
+  Future<void> initialize()async {
     await Future.delayed(const Duration(seconds: 1));
     _isInitialized = true;
   }
@@ -116,7 +116,7 @@ class MockAuthProvider implements AuthProvider{
     if(email == 'adebayo@dav.com') throw UserNotFoundAuthException();
     if(password == 'davidade') throw WrongPasswordAuthException();
     
-    const user = AuthUser(isEmailVerified: false);
+    const user = AuthUser(isEmailVerified: false,);
     _user = user;
     return Future.value(user);
   }

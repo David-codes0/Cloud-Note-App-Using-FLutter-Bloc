@@ -114,7 +114,7 @@ import 'package:firebase_auth/firebase_auth.dart'
   }
   
   @override
-  Future<void> initializeApp() async {
+  Future<void> initialize() async {
    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,
    );
   }

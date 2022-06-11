@@ -39,5 +39,5 @@ factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
       Future<void> sendEmailVerification() => provider.sendEmailVerification();
       
         @override
-        Future<void> initializeApp() => provider.initializeApp();
+        Future<void> initialize() => provider.initialize();
 }
