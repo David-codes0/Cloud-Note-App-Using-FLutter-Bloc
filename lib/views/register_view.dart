@@ -64,7 +64,7 @@ class _RegisterviewState extends State<Registerview> {
                   );
     
                 // ignore: use_build_context_synchronously
-                Navigator.of(context).pushNamed(verifiedemailRoute,
+                Navigator.of(context).pushNamed(verifiedEmailRoute,
                 );
                 AuthService.firebase().sendEmailVerification();
               }on WeakPasswordAuthException{

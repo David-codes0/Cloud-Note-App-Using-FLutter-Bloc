@@ -75,7 +75,7 @@ class _LoginviewState extends State<Loginview> {
              }
                   else{
                     // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushNamedAndRemoveUntil(verifiedemailRoute,
+                    Navigator.of(context).pushNamedAndRemoveUntil(verifiedEmailRoute,
                     (route) => false,
                 );
               }         

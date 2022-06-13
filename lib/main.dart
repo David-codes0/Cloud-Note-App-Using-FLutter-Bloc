@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/views/login_view.dart';
-import 'package:mynotes/views/notes_view.dart';
+import 'package:mynotes/views/notes/new_note_view.dart';
+import 'package:mynotes/views/notes/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
 import 'package:mynotes/views/verify_email_view.dart';  
 
@@ -21,8 +22,9 @@ void main() {
       routes: {
         loginRoute:(context) => const Loginview(),
         registerRoute: (context) => const  Registerview(),
-        verifiedemailRoute : (context) => const VerifiedEmailView(),
+        verifiedEmailRoute : (context) => const VerifiedEmailView(),
         notesRoute : (context) => const NotesView(),
+        newNoteRoute :(context) => const NewNoteView(),
       },
     ));
 }
@@ -48,7 +50,7 @@ class Homepage extends StatelessWidget {
                       }
                     }
                     else{
-                      return const NotesView();
+                      return const Registerview();
                     }
                   default: 
                     return const CircularProgressIndicator();
