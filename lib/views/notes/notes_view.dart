@@ -39,6 +39,7 @@ class _NotesViewState extends State<NotesView> {
         actions: [
           IconButton(onPressed: (){
             Navigator.of(context).pushNamed(newNoteRoute);
+            
           }, icon: const Icon(Icons.add),
         ),
           PopupMenuButton<MenuAction>(onSelected: (value) async{
@@ -83,7 +84,11 @@ class _NotesViewState extends State<NotesView> {
                     case ConnectionState.waiting:
                      return const Text('Waiting for all notes.....');
                     default:
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(backgroundColor: Colors.grey,
+                      color: Colors.green,
+                      strokeWidth: 5,
+                      value: 0,
+                   );
                   }
                 },
               );

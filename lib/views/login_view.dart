@@ -18,6 +18,7 @@ class Loginview extends StatefulWidget {
 class _LoginviewState extends State<Loginview> {
   late final TextEditingController _email;
   late final TextEditingController _password;
+  
 
   @override
   void initState() {
@@ -61,11 +62,13 @@ class _LoginviewState extends State<Loginview> {
             
                 final email = _email.text;
                 final password = _password.text;
+                
                 try{
                   await AuthService.firebase().logIn(
                   email: email,
                   password: password,
                   );
+                  
                   final user = AuthService.firebase().currentUser;
                   if (user?.isEmailVerified ?? false){
                     // ignore: use_build_context_synchronously
@@ -95,7 +98,8 @@ class _LoginviewState extends State<Loginview> {
                 await showErrorDialog(
                   context,
                   'Authentication Error');
-              }     
+              }  
+             
             },
               child: const Text('Login'),
               ),

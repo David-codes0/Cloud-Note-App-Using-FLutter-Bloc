@@ -45,10 +45,10 @@ class NotesService {
     final db = _getDatabaseOrThrow();
 
     // mahe sure note exists before update
-    await getNote(id: note.id);
-    final updatescount = await db.update(noteTable , {
-    textColumn: text,
-    isSyncedWithCloudColumn: 0,
+      await getNote(id: note.id);
+      final updatescount = await db.update(noteTable , {
+      textColumn: text,
+      isSyncedWithCloudColumn: 0,
     });
 
     if (updatescount == 0){
@@ -101,8 +101,8 @@ class NotesService {
       where: 'id = ?',
       whereArgs: [id],
     );
-    if (deleteCount == 0){
-      throw CouldNotDeleteNote();
+      if (deleteCount == 0){
+        throw CouldNotDeleteNote();
     }
     else{
       _notes.removeWhere((note) => note.id == id);
