@@ -15,59 +15,54 @@ class _NewNoteViewState extends State<NewNoteView> {
   DatabaseNote? _note;
   late final NotesService _notesService;
   late final TextEditingController _textController;
-  String get userEmail => AuthService.firebase().currentUser!.email!;
 
-   @override
+  @override
   void initState() {
-   _notesService = NotesService();
-   _textController = TextEditingController();
+    _notesService = NotesService();
+    _textController = TextEditingController();
     super.initState();
   }
 
-
- void _textControllerListener() async {
-  final note = _note;
-  if (note == null){
-    return;
+  void _textControllerListener() async {
+    final note = _note;
+    if (note == null) {
+      return;
+    }
+    final text = _textController.text;
+    await _notesService.updateNote(
+      note: note,
+      text: text,
+    );
   }
-  final text = _textController.text;
-  await _notesService.updateNote(
-    note: note,
-    text: text,
-  );
-  
-}
-void _setUpTextControllerListener() {
+
+  void _setupTextControllerListener() {
     _textController.removeListener(_textControllerListener);
     _textController.addListener(_textControllerListener);
   }
 
-  
-
-  Future<DatabaseNote> createNewNote () async {
+  Future<DatabaseNote> createNewNote() async {
     final existingNote = _note;
-    if (existingNote != null){
+    if (existingNote != null) {
       return existingNote;
     }
-    // final currentUser = AuthService.firebase().currentUser!;
-    // final email = currentUser.email!;
-    final owner = await _notesService.getUser(email: userEmail);
+    final currentUser = AuthService.firebase().currentUser!;
+    final email = currentUser.email!;
+    final owner = await _notesService.getUser(email: email);
     return await _notesService.createNote(owner: owner);
   }
 
-  void _deleteNoteIfTextIsEmpty () {
-    final  note = _note;
-    // final text = _textEditingController;
-    if (_textController.text.isEmpty && note != null){
-       _notesService.deleteNote(id: note.id);
+  void _deleteNoteIfTextIsEmpty() {
+    final note = _note;
+    if (_textController.text.isEmpty && note != null) {
+      _notesService.deleteNote(id: note.id);
     }
   }
 
-  void _saveNoteIfTextIsNotEmpty () async {
+  void _saveNoteIfTextNotEmpty() async {
     final note = _note;
     final text = _textController.text;
-    if (text.isNotEmpty && note != null){
-        await _notesService.updateNote(
+    if (note != null && text.isNotEmpty) {
+      await _notesService.updateNote(
         note: note,
         text: text,
       );
@@ -76,15 +71,11 @@ void _setUpTextControllerListener() {
 
   @override
   void dispose() {
-   _deleteNoteIfTextIsEmpty();
-    _saveNoteIfTextIsNotEmpty();
+    _deleteNoteIfTextIsEmpty();
+    _saveNoteIfTextNotEmpty();
     _textController.dispose();
     super.dispose();
-
   }
-
- 
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,29 +84,25 @@ void _setUpTextControllerListener() {
         title: const Text('New Note'),
       ),
       body: FutureBuilder(
-       future: createNewNote(),
-      builder: (context,snapshot){
-        switch (snapshot.connectionState) {
-
-          case ConnectionState.done:
-          //  _note = snapshot.data as DatabaseNote; < not working >
-            _setUpTextControllerListener();
+        future: createNewNote(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.done:
+              _note = snapshot.data as DatabaseNote;
+              _setupTextControllerListener();
               return TextField(
                 controller: _textController,
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 decoration: const InputDecoration(
-                  hintText: '  Start typing your note here.... ',
+                  hintText: 'Start typing your note...',
                 ),
               );
-
-          default:
-            return const LinearProgressIndicator();
-        }
-      
-      },),
-    
+            default:
+              return const CircularProgressIndicator();
+          }
+        },
+      ),
     );
-    
   }
 }
