@@ -12,6 +12,7 @@ extension GetArgument on BuildContext {
         return args as T;
       }
     }
+    return null;
   }
 
 }
