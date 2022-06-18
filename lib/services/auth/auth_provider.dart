@@ -1,6 +1,6 @@
 
 import 'package:mynotes/services/auth/auth_user.dart';
-
+//  this defines the interface for every auth provider e.g gmail auth provider, firebase auth provider or facebook auth provider
 abstract class AuthProvider {
   Future<void>initialize();
   AuthUser? get currentUser;

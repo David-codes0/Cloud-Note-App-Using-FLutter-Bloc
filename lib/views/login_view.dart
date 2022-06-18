@@ -1,9 +1,12 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
-import 'package:mynotes/services/auth/auth_service.dart';
+// import 'package:mynotes/services/auth/auth_service.dart';
+import 'package:mynotes/services/auth/bloc/auth_event.dart';
+import 'package:mynotes/services/auth/bloc/authbloc.dart';
 import 'package:mynotes/utility/dialogs/error_dialog.dart';
 
 
@@ -58,30 +61,19 @@ class _LoginviewState extends State<Loginview> {
               ),
             ),
   
-              TextButton(onPressed: () async {
+              TextButton(
+                onPressed: () async {
             
                 final email = _email.text;
                 final password = _password.text;
                 
                 try{
-                  await AuthService.firebase().logIn(
-                  email: email,
-                  password: password,
-                  );
-                  
-                  final user = AuthService.firebase().currentUser;
-                  if (user?.isEmailVerified ?? false){
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushNamedAndRemoveUntil(notesRoute,
-                    (route) => false,
-                );
-             }
-                  else{
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pushNamedAndRemoveUntil(verifiedEmailRoute,
-                    (route) => false,
-                );
-              }         
+                  context.read<AuthBloc>().add(
+                    AuthEventLogIn(
+                        email, 
+                        password,
+                      ),
+                    );
               }on UserNotFoundAuthException {
                 await showErrorDialog(
                 context,

@@ -21,7 +21,7 @@ factory AuthService.firebase() => AuthService(FirebaseAuthProvider());
           );
     
       @override
-      AuthUser? get currentUser => provider.currentUser;
+      AuthUser? get currentUser => provider.currentUser; // exposing the currentUser
     
       @override
       Future<AuthUser> logIn({
