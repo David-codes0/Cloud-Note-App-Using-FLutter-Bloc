@@ -26,10 +26,6 @@ void main() {
       child: const Homepage(),
     ),
     routes: {
-      loginRoute: (context) => const Loginview(),
-      registerRoute: (context) => const Registerview(),
-      verifiedEmailRoute: (context) => const VerifiedEmailView(),
-      notesRoute: (context) => const NotesView(),
       createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
     },
   ));
@@ -51,6 +47,8 @@ class Homepage extends StatelessWidget {
       }
       else if (state is AuthStateLoggedOut){
         return const Loginview();
+      }else if (state is AuthStateRegistering){
+        return const Registerview();
       }
       else{
         return const Scaffold(
