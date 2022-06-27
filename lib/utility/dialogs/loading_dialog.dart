@@ -8,14 +8,15 @@ CloseDialog showLoadingDialog({
   required String text,
 }) {
     final dialog = AlertDialog(
-      content: Column(
+        content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const RefreshProgressIndicator(),
-          const SizedBox(height: 10.0,),
+          const SizedBox(
+            height: 10.0,
+          ),
           Text(text),
         ],
-        
       ) 
     );
 

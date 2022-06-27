@@ -6,7 +6,7 @@ import 'package:mynotes/services/auth/auth_exceptions.dart';
 import 'package:mynotes/services/auth/auth_provider.dart';
 
 import 'package:firebase_auth/firebase_auth.dart'
-  show FirebaseAuth;
+  show FirebaseAuth, FirebaseAuthException;
 
 
 
@@ -29,7 +29,7 @@ import 'package:firebase_auth/firebase_auth.dart'
         else{
           throw UserNotLoggedInAuthException();
         }
-    } on FirebaseException catch(e){
+    } on FirebaseAuthException catch(e){
       if (e.code == 'weak-password'){
         throw WeakPasswordAuthException();
       }
@@ -90,7 +90,7 @@ import 'package:firebase_auth/firebase_auth.dart'
         } else {
           throw UserNotLoggedInAuthException();
         }
-    }on FirebaseException catch (e){
+    }on FirebaseAuthException catch (e){
       if (e.code == 'user-not-found'){
         throw UserNotFoundAuthException();
       }
@@ -120,5 +120,25 @@ import 'package:firebase_auth/firebase_auth.dart'
   Future<void> initialize() async {
    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,
    );
+  }
+  
+  @override
+  Future<void> sendPasswordReset({required String toEmail}) async {
+   try{
+    await FirebaseAuth.instance.sendPasswordResetEmail(email: toEmail);
+
+   }on FirebaseAuthException catch(e){
+    switch(e.code){
+      case 'firebase_auth/invalid-email' : 
+        throw InvalidEmailAuthException();
+      case 'firebase_auth/user-not-found':
+        throw UserNotFoundAuthException();
+      default :
+        throw GenericAuthException();
+    }
+   }
+   catch(_) {
+    throw GenericAuthException();
+   }
   }
   }

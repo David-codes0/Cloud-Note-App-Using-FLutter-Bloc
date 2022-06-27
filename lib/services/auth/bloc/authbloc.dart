@@ -9,8 +9,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
 
   AuthBloc(AuthProvider provider) : super(const AuthStateUninitialized(isLoading: true)) {
-    // send email verification
-    on<AuthEventSendEmailVerification>((event, emit) async {
+
+    on<AuthEventShouldRegister>((event,emit) {
+      emit(const AuthStateRegistering(
+        exception: null, 
+        isLoading: false,
+        ),
+        );
+    });
+
+
+  // send email verification
+  on<AuthEventSendEmailVerification>((event, emit) async {
       await provider.sendEmailVerification();
       emit(state); // this means after clicking the sendemailver button no other page is push it still remain on the same page
     });
@@ -54,6 +64,7 @@ on<AuthEventRegister>((event, emit) async{
       ),
     );
   }
+  });
      // login
      on<AuthEventLogIn >((event, emit) async{ // emit help to send state from your authbloc out
      emit(const AuthStateLoggedOut(
@@ -98,6 +109,44 @@ on<AuthEventRegister>((event, emit) async{
       emit(AuthStateLoggedOut(exception: e, isLoading: false));
      }
     });
-  });
+    // forgot password
+    on<AuthEventForgotPassword>((event, emit) async  {
+     
+        emit(const AuthStateForgotPassword(
+          exception: null,
+          hasSentEmail: false,
+          isLoading: false,
+          ));
+
+        final email = event.email;
+        if (email == null){
+          return; // user just wants to go to forgor-password screen
+        }
+        // user wants to actually send a forgot-password
+        emit(const AuthStateForgotPassword(
+          exception: null,
+          hasSentEmail: false,
+          isLoading: true
+          ));
+
+          bool didSentEmail;
+          Exception? exception;
+
+          try{
+            await provider.sendPasswordReset(toEmail: email);
+            didSentEmail = true;
+            exception = null;
+          }on Exception catch(e){
+            didSentEmail = false;
+            exception = e;
+          }
+         emit(AuthStateForgotPassword(
+          exception: exception,
+          hasSentEmail: didSentEmail,
+          isLoading: false
+          ));
+
+      
+    });
   }
-}
+  }

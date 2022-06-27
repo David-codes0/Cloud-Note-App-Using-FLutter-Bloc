@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynotes/constants/routes.dart';
 import 'package:mynotes/helpers/loading/loading_screen.dart';
-
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
 import 'package:mynotes/services/auth/bloc/authbloc.dart';
 import 'package:mynotes/services/auth/firebase_auth_provider.dart';
+import 'package:mynotes/views/forgot_password_view.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/notes/create_update_note_view.dart';
 import 'package:mynotes/views/notes/notes_view.dart';
@@ -19,6 +19,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MaterialApp(
     title: 'Flutter Demo',
+    debugShowMaterialGrid: false,
     theme: ThemeData(
       primarySwatch: Colors.lightGreen,
     ),
@@ -26,6 +27,7 @@ void main() {
       create: (context) => AuthBloc(FirebaseAuthProvider()),
       child: const Homepage(),
     ),
+    debugShowCheckedModeBanner: false,
     routes: {
       createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
     },
@@ -60,6 +62,8 @@ class Homepage extends StatelessWidget {
         return const Loginview();
       }else if (state is AuthStateRegistering){
         return const Registerview();
+      }else if (state is AuthStateForgotPassword){
+        return const ForgotPassword();
       }
       else{
         return const Scaffold(
