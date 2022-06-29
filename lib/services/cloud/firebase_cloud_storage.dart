@@ -36,32 +36,17 @@ class FirebaseCloudStorage {
    }
 
   // TO GRAB A STREAM A DATA, IF YOU WANT TO SUBCRIBE TO ALL THE CHANGES AS IT IS ENVOLVING
-  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) =>
-    notes.snapshots().map((event) => event.docs
+  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}){
+    final allNotes = 
+    notes
+    .where(ownerUserIdFieldName, isEqualTo: ownerUserId)
+    .snapshots().map((event) => event.docs
     .map((doc) => CloudNote.fromSnapshot(doc))
-    .where((note) => note.ownerUserId == ownerUserId));
+    .where((note) => note.ownerUserId == ownerUserId,
+    ));
+    return allNotes;
+}
   
-  Future<Iterable<CloudNote>> getNotes ({required String ownerUserId}) async {
-    try {
-     return await notes
-      .where(  // read the where and get documentation to understand how they work
-      ownerUserIdFieldName, 
-      isEqualTo: ownerUserId).get()
-      .then((value) => value.docs.map(
-        (doc) {
-           return CloudNote.fromSnapshot(doc);
-           // CloudNote(
-          // documentId: doc.id,
-          // ownerUserId : doc.data()[ownerUserIdFieldName] as String,
-          // text: doc.data()[textFieldName] as String,
-          // );
-        },
-        ),
-      );
-    }catch (e) {
-      throw CouldNoteGetAllNotesException();
-    }
-  }
    Future<CloudNote> createNewNote({required String ownerUserId}) async {
       final document = await notes.add({
         ownerUserIdFieldName: ownerUserId,
