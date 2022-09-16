@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
- 
 import 'package:mynotes/helpers/loading/loading_screen_controller.dart';
+import 'package:mynotes/views/thank_youpage.dart';
 
 class LoadingScreen {
   // singleton
@@ -38,7 +38,7 @@ class LoadingScreen {
     final texT = StreamController<String>();
     texT.add(text);
     final state = Overlay.of(context); // this create an overlay state
-    final renderBox = context.findRenderObject() as RenderBox;
+    
 
 
     final overlay = OverlayEntry(
@@ -64,7 +64,7 @@ class LoadingScreen {
                    mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 10),
-                  const CircularProgressIndicator(),
+                  const LottieAni(),
                   const SizedBox(height: 20),
                   StreamBuilder(
                     stream: texT.stream,

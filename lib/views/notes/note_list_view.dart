@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mynotes/services/cloud/cloud_note.dart';
 import 'package:mynotes/utility/dialogs/delete_dialog.dart';
+import 'package:mynotes/widgets/notelistview.dart';
 
-typedef NoteCallBack = void Function (CloudNote note);
+typedef NoteCallBack = void Function(CloudNote note);
+
+typedef BuildContextCallBack = void Function(BuildContext context);
 
 class NoteListView extends StatelessWidget {
-
- // final List<DatabaseNote> notes;
- final Iterable<CloudNote> notes;
+  // final List<DatabaseNote> notes;
+  final Iterable<CloudNote> notes;
   final NoteCallBack onDeleteNote;
   final NoteCallBack onTap;
   const NoteListView({
@@ -20,30 +23,34 @@ class NoteListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: notes.length,
-          itemBuilder: (context,index) {
-           // final note = notes[index];
-           final note = notes.elementAt(index);
-            return ListTile(
-              onTap: () {
-                onTap(note);
-              },
-              title: Text(
-                note.text,
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: IconButton(
-                  onPressed: () async {
-                    final shouldDelete = await showDeleteDialog(context);
-                    if (shouldDelete){
-                      onDeleteNote(note);
-                    }
-                },
-                icon: const Icon(Icons.delete)),
-              );
+      itemCount: notes.length,
+      itemBuilder: (context, index) {
+       
+        final note = notes.elementAt(index);
+        return NoteListTile(
+          onDeleteNote: (context) async {
+            final shouldDelete = await showDeleteDialog(context);
+            if (shouldDelete) {
+              onDeleteNote(note);
+            }
+          },
+          child: ListTile(
+            minVerticalPadding: 20,
+            onTap: () {
+              onTap(note);
             },
+            title: Text(
+              note.text,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.nunito(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
+          ),
         );
+      },
+    );
   }
 }

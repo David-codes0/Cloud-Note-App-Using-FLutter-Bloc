@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mynotes/services/auth/auth_exceptions.dart';
 // import 'package:mynotes/services/auth/auth_service.dart';
 import 'package:mynotes/services/auth/bloc/auth_event.dart';
 import 'package:mynotes/services/auth/bloc/auth_state.dart';
 import 'package:mynotes/services/auth/bloc/authbloc.dart';
 import 'package:mynotes/utility/dialogs/error_dialog.dart';
-
+import 'package:mynotes/widgets/app_custom_button.dart';
+import 'package:mynotes/widgets/app_styles.dart';
+import 'package:mynotes/widgets/app_textfield.dart';
 
 
 class Loginview extends StatefulWidget {
@@ -22,8 +22,6 @@ class Loginview extends StatefulWidget {
 class _LoginviewState extends State<Loginview> {
   late final TextEditingController _email;
   late final TextEditingController _password;
- 
-
 
   @override
   void initState() {
@@ -43,72 +41,113 @@ class _LoginviewState extends State<Loginview> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
-       if (state is AuthStateLoggedOut) {
+        if (state is AuthStateLoggedOut) {
           if (state.exception is UserNotFoundAuthException) {
-            await showErrorDialog(context,'User not found');
+            await showErrorDialog(context, 'User not found');
           }
           if (state.exception is WrongPasswordAuthException) {
             await showErrorDialog(context, 'Wrong Credentials');
           }
           if (state.exception is GenericAuthException) {
-            await showErrorDialog(context,'Authentication Error',);
+            await showErrorDialog(
+              context,
+              'Authentication Error',
+            );
           }
-      }
-    },
+        }
+      },
       child: Scaffold(
+        backgroundColor: kAppBackground,
         appBar: AppBar(
-          title: const Text('Login'),
+          elevation: 0,
+          title: Text(
+            'Login',
+            style: GoogleFonts.nunito(
+                textStyle: Theme.of(context).textTheme.headline4,
+                fontSize: 40,
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.transparent,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const Text(
-                  'Please log in to your account in other to interact with and create note'),
-                TextField(
-                  controller: _email,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your email',
+        body: Center(
+          child: Container(
+            height: 400,
+            width: 300,
+            decoration: BoxDecoration(
+              color: kDarkWhiteColor,
+              borderRadius: BorderRadius.circular(
+                20,
+              ),
+            ),
+            child: Center(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(13.0),
+                    child: Text(
+                      'Enter your email and password to see your notes!'
+                     ,
+                      textAlign: TextAlign.left,
+                      style: GoogleFonts.pacifico(
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          color: Color(0xFF474747),
+                        ),
+                      ),
+                    ),
                   ),
-                  autocorrect: false,
-                ),
-                TextField(
-                  controller: _password,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'Enter your password',
+                  const SizedBox(height: 40),
+                  AppTextField(
+                    keyboardType: TextInputType.emailAddress,
+                    autoFocus: true,
+                    controller: _email,
+                    labelText: 'Enter your email',
+                    color: Colors.grey,
+                    obsecure: false,
                   ),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    final email = _email.text;
-                    final password = _password.text;
-          
-                    context.read<AuthBloc>().add(
-                          AuthEventLogIn(
-                            email,
-                            password,
-                          ),
-                        );
-                  },
-                  child: const Text('Login'),
-                ),
-                TextButton(
-                    onPressed: () {
+                  const SizedBox(height: 30),
+                  AppTextField(
+                    keyboardType: TextInputType.text,
+                    autoFocus: false,
+                    controller: _password,
+                    labelText: 'Enter your password',
+                    color: Colors.grey,
+                    obsecure: true,
+                  ),
+                  const SizedBox(height: 10),
+                  AuthButton(
+                    buttonName: 'Login',
+                    onPressed: () async {
+                      final email = _email.text.trim();
+                      final password = _password.text.trim();
+
                       context.read<AuthBloc>().add(
-                        const AuthEventForgotPassword()
-                      );
+                            AuthEventLogIn(
+                              email,
+                              password,
+                            ),
+                          );
                     },
-                    child: const Text('Forgot Password ?')),
-                TextButton(
+                  ),
+                  AuthButton(
+                    buttonName: 'Forgot Password ?',
                     onPressed: () {
-                      context.read<AuthBloc>().add(
-                        const AuthEventShouldRegister()
-                      );
+                      context
+                          .read<AuthBloc>()
+                          .add(const AuthEventForgotPassword());
                     },
-                    child: const Text('Not registered yet? Register')),
-              ],
+                  ),
+                  AuthButton(
+                    buttonName: 'Not registered yet? Register',
+                    onPressed: () {
+                      context
+                          .read<AuthBloc>()
+                          .add(const AuthEventShouldRegister());
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -116,3 +155,4 @@ class _LoginviewState extends State<Loginview> {
     );
   }
 }
+

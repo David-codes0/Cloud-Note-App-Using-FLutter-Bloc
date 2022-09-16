@@ -5,10 +5,13 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 abstract class AuthEvent{
   const AuthEvent();
+
+
 }
 
 class AuthEventInitialize extends AuthEvent { // upon starting your auth process we start ny initializing
   const AuthEventInitialize(); // from main file (future: AuthService.firebase().initialize(),)
+
 }
 
 class AuthEventSendEmailVerification extends AuthEvent {
