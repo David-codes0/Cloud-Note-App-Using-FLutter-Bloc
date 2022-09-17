@@ -1,10 +1,11 @@
-# mynotes
+# Cloud note app
 
 A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### This project help to store your note on the cloud using Firebase cloud store,
+### you can create, update and delete note in the app.
 
 A few resources to get you started if this is your first Flutter project:
 
